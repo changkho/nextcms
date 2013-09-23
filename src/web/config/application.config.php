@@ -14,6 +14,7 @@ return [
         'Hello',
         'I18n',
         'Mongo',
+        'Session',
     ],
 
     'module_listener_options' => [
