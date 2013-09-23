@@ -13,6 +13,7 @@ return [
         'Asset',
         'Hello',
         'I18n',
+        'Mongo',
     ],
 
     'module_listener_options' => [
