@@ -10,6 +10,7 @@
 
 return [
     'modules' => [
+        'Acl',
         'Asset',
         'Hello',
         'I18n',

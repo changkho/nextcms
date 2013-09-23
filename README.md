@@ -12,8 +12,7 @@ NextCMS is a next generation of content management system for the enterprises, p
 NextCMS uses some PHP 5.4 features such as short syntax of array (```[]```), ```trait```
 
 * PHP extensions:
-
-- [intl](http://www.php.net/manual/en/intl.setup.php): Required by ```I18n``` module
+    - [intl](http://www.php.net/manual/en/intl.setup.php): Required by ```I18n``` module
 
 ## Demo
 
