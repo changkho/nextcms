@@ -1,0 +1,40 @@
+/**
+ * NextCMS (http://nextcms.org)
+ *
+ * @link        https://github.com/nghuuphuoc/nextcms
+ * @author      Nguyen Huu Phuoc <phuoc@huuphuoc.me>
+ * @copyright   Copyright (c) 2013 NextCMS
+ * @license     MIT
+ */
+
+// Variables
+// Height of footer
+$footerHeight: 80px;
+
+a {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+// Sticky footer
+html, body {
+  height: 100%;
+}
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -#{$footerHeight} auto;
+}
+#main {
+  padding-top: $footerHeight;
+}
+#push {
+  height: $footerHeight;
+}
+footer {
+  border-top: 1px solid #c0c0c0;
+  height: $footerHeight - 1;
+  padding-top: 10px;
+}

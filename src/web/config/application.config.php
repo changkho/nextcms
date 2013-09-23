@@ -10,7 +10,9 @@
 
 return [
     'modules' => [
+        'Asset',
         'Hello',
+        'I18n',
     ],
 
     'module_listener_options' => [

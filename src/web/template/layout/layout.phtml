@@ -1,14 +1,45 @@
 <?= $this->doctype(); ?>
-<html>
+<html itemscope itemtype="http://schema.org/Article">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php
+    $this->headLink()->prependStylesheet('/module/hello/css/style.css')
+                     ->prependStylesheet('/vendor/font-awesome/css/font-awesome.min.css')
+                     ->prependStylesheet('/vendor/bootstrap/css/bootstrap.css');
+    $this->headScript()->prependFile('/vendor/bootstrap/js/bootstrap.min.js');
+    ?>
+    <!--[if IE 7]><link rel="stylesheet" href="<?= $this->cdn('/vendor/font-awesome/css/font-awesome-ie7.min.css'); ?>"><![endif]-->
+    <!--[if lt IE 9]><script src="<?= $this->cdn('vendor/jquery/jquery-1.10.2.min.js'); ?>"></script><![endif]-->
+    <!--[if gte IE 9]><!--><script src="<?= $this->cdn('vendor/jquery/jquery-2.0.3.min.js'); ?>"></script><!--<![endif]-->
+    <!--[if lt IE 9]>
+    <script src="<?= $this->cdn('/vendor/html5shiv/html5shiv.min.js'); ?>"></script>
+    <script src="<?= $this->cdn('/vendor/respond/respond.min.js'); ?>"></script>
+    <![endif]-->
     <?= $this->headMeta(); ?>
     <?= $this->headTitle(); ?>
     <?= $this->headLink(); ?>
 </head>
 <body>
-    <?= $this->content; ?>
+    <div id="wrap">
+        <!-- content: -->
+        <div id="main">
+            <div class="container">
+                <?= $this->content; ?>
+            </div>
+        </div>
+        <!-- :content -->
+
+        <div id="push"></div>
+    </div>
+
+    <!-- footer: -->
+    <footer role="contentinfo">
+        <div class="container">
+            <small><?= $this->_('&copy; 2013 NextCMS. All Rights Reserved.', 'Hello'); ?></small>
+        </div>
+    </footer>
+    <!-- :footer -->
 
 <?= $this->headScript(); ?>
 <?= $this->inlineScript(); ?>
