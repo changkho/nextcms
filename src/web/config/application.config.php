@@ -13,6 +13,7 @@ return [
         'Acl',
         'Asset',
         'Hello',
+        'Helper',
         'I18n',
         'Mongo',
         'Session',

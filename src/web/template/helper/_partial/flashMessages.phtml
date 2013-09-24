@@ -1,0 +1,17 @@
+<?php if ($this->messages) : ?>
+    <?php foreach ($this->messages as $namespace => $messages) : ?>
+            <div class="alert alert-block alert-<?= $this->classMap[$namespace]; ?>">
+                <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a>
+
+                <?php if (count($messages) == 1) : ?>
+                    <?= $messages[0]; ?>
+                <?php else : ?>
+                    <ul style="margin-bottom: 0;">
+                        <?php foreach ($messages as $message) : ?>
+                            <li><?= $message; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
+    <?php endforeach; ?>
+<?php endif; ?>

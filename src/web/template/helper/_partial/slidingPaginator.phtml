@@ -1,0 +1,40 @@
+<?php if ($this->pageCount > 1): ?>
+<ul class="pagination">
+    <!-- first-page -->
+    <?php if (isset($this->previous)): ?>
+    <li><a href="<?= $this->urlBuilder($this->route, $this->routeParams ? array_merge($this->routeParams, ['page' => $this->first]) : ['page' => $this->first], $this->excludedParams); ?>"><?= $this->_('First', 'Helper'); ?></a></li>
+    <?php else: ?>
+    <li class="disabled"><span><?= $this->_('First', 'Helper'); ?></span></li>
+    <?php endif; ?>
+
+    <!-- prev-page -->
+    <?php if (isset($this->previous)): ?>
+    <li><a href="<?= $this->urlBuilder($this->route, $this->routeParams ? array_merge($this->routeParams, ['page' => $this->previous]) : ['page' => $this->previous], $this->excludedParams); ?>">&larr;</a></li>
+    <?php else: ?>
+    <li class="disabled"><span>&larr;</span></li>
+    <?php endif; ?>
+
+    <!-- numbered-page -->
+    <?php foreach ($this->pagesInRange as $page): ?>
+        <?php if ($page != $this->current): ?>
+        <li><a href="<?= $this->urlBuilder($this->route, $this->routeParams ? array_merge($this->routeParams, ['page' => $page]) : ['page' => $page], $this->excludedParams); ?>"><?= $page; ?></a></li>
+        <?php else: ?>
+        <li class="active"><span><?= $page; ?></span></li>
+        <?php endif; ?>
+    <?php endforeach; ?>
+
+    <!-- next-page -->
+    <?php if (isset($this->next)): ?>
+    <li><a href="<?= $this->urlBuilder($this->route, $this->routeParams ? array_merge($this->routeParams, ['page' => $this->next]) : ['page' => $this->next], $this->excludedParams); ?>">&rarr;</a></li>
+    <?php else: ?>
+    <li class="disabled"><span>&rarr;</span></li>
+    <?php endif; ?>
+
+    <!-- last-page -->
+    <?php if (isset($this->next)): ?>
+    <li><a href="<?= $this->urlBuilder($this->route, $this->routeParams ? array_merge($this->routeParams, ['page' => $this->last]) : ['page' => $this->last], $this->excludedParams); ?>"><?= $this->_('Last', 'Helper'); ?></a></li>
+    <?php else: ?>
+    <li class="disabled"><span><?= $this->_('Last', 'Helper'); ?></span></li>
+    <?php endif; ?>
+</ul>
+<?php endif; ?>
