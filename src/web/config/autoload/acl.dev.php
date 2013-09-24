@@ -13,6 +13,8 @@ return [
         'resource_providers' => [
             'Acl\Provider\Resource\Config' => [
                 'Hello\Controller\Dashboard',
+
+                'User\Controller\Manager',
                 'User\Controller\Profile',
             ],
         ],

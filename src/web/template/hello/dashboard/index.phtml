@@ -1,2 +1,13 @@
 <?php
 $this->headTitle($this->_('Dashboard'));
+?>
+
+<?php if ($this->modules) : ?>
+<div class="container">
+    <div class="row">
+        <?php foreach ($this->modules as $index => $module) : ?>
+        <?php $this->eventManager->trigger('dashboard.' . lcfirst($module), $this, ['module' => $module, 'view' => $this]); ?>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>

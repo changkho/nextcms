@@ -14,6 +14,7 @@ return [
             'isAllowed' => 'Acl\Controller\Plugin\IsAllowed',
         ],
     ],
+
     'service_manager' => [
         'invokables' => [
             // Mapper
@@ -36,6 +37,7 @@ return [
             'Acl\Service\Guard'            => 'Acl\Service\GuardFactory',
         ],
     ],
+
     'view_helpers' => [
         'invokables' => [
             'identity'  => 'Acl\View\Helper\Identity',

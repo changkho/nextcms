@@ -44,6 +44,12 @@ return [
         ],
     ],
 
+    'view_helpers' => [
+        'invokables' => [
+            'sidebar' => 'Hello\View\Helper\Sidebar',
+        ],
+    ],
+
     'view_manager' => [
         'display_exceptions' => true,
         'doctype'            => 'HTML5',

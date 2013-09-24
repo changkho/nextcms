@@ -1,2 +1,10 @@
-<?php
-$this->headTitle('Error');
+<?php $this->_('Error', 'Hello'); ?>
+
+<div class="page-header">
+    <h1><?= $this->_('Error', 'Hello'); ?></h1>
+</div>
+
+<p><?= $this->_('Sorry, there is an error as following. Please try again!', 'Hello'); ?></p>
+<div class="alert alert-error">
+    <?= $this->exception->getMessage(); ?>
+</div>

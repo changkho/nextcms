@@ -1,0 +1,10 @@
+<?php if ($this->isAllowed('User\Controller\Manager', 'list')) : ?>
+    <div class="col-lg-3">
+        <div class="panel panel-default">
+            <div class="panel-heading"><?= $this->_('Users'); ?></div>
+            <div class="panel-body text-center">
+                <a href="<?= $this->url('user\manager\list'); ?>"><i class="icon-group icon-5x"></i></a>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

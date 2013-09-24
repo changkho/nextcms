@@ -34,11 +34,11 @@ class IsAllowed extends AbstractHelper implements ServiceLocatorAwareInterface
         /** @var \Zend\View\HelperPluginManager $helperManager */
         $helperManager = $this->serviceLocator;
 
-        /** @var \Zend\ServiceManager\ServiceManager $locator */
-        $locator = $helperManager->getServiceLocator();
+        /** @var \Zend\ServiceManager\ServiceManager $serviceLocator */
+        $serviceLocator = $helperManager->getServiceLocator();
 
         /** @var \Acl\Service\Acl $acl */
-        $acl       = $locator->get('Acl\Service\Acl');
+        $acl       = $serviceLocator->get('Acl\Service\Acl');
         $isAllowed = $acl->isAllowed(Authentication::getInstance()->getIdentity()->role, $resource, $privilege);
 
         // Cache user's privilege

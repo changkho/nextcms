@@ -1,0 +1,90 @@
+<?php
+$this->headTitle($this->_('Users'));
+?>
+
+<?php $this->placeHolder('nav')->captureStart(); ?>
+<ul>
+    <li><a href="<?= $this->url('user\manager\list'); ?>"><?= $this->_('Users'); ?></a></li>
+</ul>
+<?php $this->placeHolder('nav')->captureEnd(); ?>
+
+<div class="container">
+    <form action="<?= $this->url('user\manager\list'); ?>" method="get" class="form-inline" style="margin-bottom: 20px;">
+        <input type="text" name="q" class="form-control" style="width: 40%;" placeholder="<?= $this->_('Username or email address'); ?>" value="<?= $this->escapeHtml($this->keyword); ?>" />
+        <button type="submit" class="btn btn-success"><i class="icon-search"></i> <?= $this->_('Search'); ?></button>
+
+        <div class="pull-right btn-group">
+            <a href="<?= $this->url('user\manager\list', ['page' => 1, 'q' => $this->keyword]); ?>" class="btn btn-default <?php if (null == $this->status): ?>active<?php endif; ?>"><i class="icon-list"></i> <?= $this->_('All'); ?></a>
+            <a href="<?= $this->urlBuilder('user\manager\list', ['page' => 1, 'status' => 'activated', 'q' => $this->keyword]); ?>" class="btn btn-default <?php if ('activated' == $this->status): ?>active<?php endif; ?>"><i class="icon-ok"></i> <?= $this->_('Activated'); ?></a>
+            <a href="<?= $this->urlBuilder('user\manager\list', ['page' => 1, 'status' => 'deactivated', 'q' => $this->keyword]); ?>" class="btn btn-default <?php if ('deactivated' == $this->status): ?>active<?php endif; ?>"><i class="icon-ban-circle"></i> <?= $this->_('Not activated'); ?></a>
+        </div>
+    </form>
+
+    <?php if ($this->total == 0) : ?>
+        <p><?= $this->_('There is no users'); ?></p>
+    <?php else : ?>
+        <p><?= sprintf($this->_('Found %s users'), '<span class="badge">' . $this->total . '</span>'); ?></p>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th><?= $this->_('Full name'); ?></th>
+                    <th><?= $this->_('Username'); ?></th>
+                    <th><?= $this->_('Email'); ?></th>
+                    <th><?= $this->_('Last logged in'); ?></th>
+                    <th><?= $this->_('Actions'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($this->users as $user) : ?>
+                <tr class="<?php if ((string) $this->user->getId() == (string) $user->getId()) : ?>warning<?php endif; ?>">
+                    <td><?= implode(' ', [$user->first_name, $user->last_name]); ?></td>
+                    <td><?= $user->user_name; ?></td>
+                    <td><?= $user->email; ?></td>
+                    <td><?= $user->last_logged_in ? date('Y-m-d', $user->last_logged_in->sec) : '---'; ?></td>
+                    <td>
+                        <div class="btn-group">
+                            <?php if ((string) $this->user->getId() != (string) $user->getId()) : ?>
+                                <button class="btn btn-default activateButton <?php if ('activated' == $user->status) : ?>btn-warning<?php endif; ?>" data-id="<?= (string) $user->getId(); ?>" data-status="<?= $user->status; ?>"><?= $this->_($user->status == 'activated' ? 'Deactivate' : 'Activate'); ?></button>
+                            <?php else : ?>
+                                <a class="btn btn-info disabled"><?= $this->_('It is you'); ?></a>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <div class="text-center">
+            <?= $this->paginator($this->paginator, 'user\manager\list'); ?>
+        </div>
+    <?php endif; ?>
+</div>
+
+<?php $this->inlineScript()->captureStart(); ?>
+$(document).ready(function() {
+    // Activate/deactivate user
+    $('.activateButton').on('click', function() {
+        var $that = $(this),
+            id    = $that.attr('data-id');
+        $that.attr('disabled', 'disabled');
+        $.ajax({
+            type: 'post',
+            url: '<?= $this->url('user\manager\activate'); ?>',
+            data: {
+                id: id
+            },
+            dataType: 'json'
+        }).done(function(response) {
+            $that.removeAttr('disabled');
+            if ('OK' == response.result) {
+                var status = $that.attr('data-status') == 'activated' ? 'deactivated' : 'activated';
+                $that.attr('data-status', status)
+                     .toggleClass('btn-warning')
+                     .html(status == 'activated' ? '<?= $this->_('Deactivate'); ?>' : '<?= $this->_('Activate'); ?>');
+            }
+        });
+    });
+});
+<?php $this->inlineScript()->captureEnd(); ?>

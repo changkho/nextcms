@@ -1,2 +1,23 @@
 <?php
-$this->headTitle('404 not found');
+$this->headTitle($this->_('404 error', 'Hello'));
+?>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4 col-lg-offset-4">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><?= $this->_('404 error', 'Hello'); ?></h3>
+                </div>
+
+                <div class="panel-body">
+                    <p><?= $this->_('Sorry, the page is not found', 'Hello'); ?></p>
+                </div>
+
+                <div class="panel-footer text-center">
+                    <a class="btn btn-primary" href="/"><?= $this->_('Go to homepage', 'Hello'); ?></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

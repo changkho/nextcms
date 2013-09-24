@@ -12,6 +12,7 @@ return [
     'controllers' => [
         'invokables' => [
             'User\Controller\Auth'    => 'User\Controller\AuthController',
+            'User\Controller\Manager' => 'User\Controller\ManagerController',
             'User\Controller\Profile' => 'User\Controller\ProfileController',
         ],
     ],
@@ -83,6 +84,29 @@ return [
                     ],
                 ],
             ],
+
+            'user\manager\activate' => [
+                'type'	  => 'literal',
+                'options' => [
+                    'route'    => '/user/manager/activate',
+                    'defaults' => [
+                        'controller' => 'User\Controller\Manager',
+                        'action'     => 'activate',
+                        'backend'    => true,
+                    ],
+                ],
+            ],
+            'user\manager\list' => [
+                'type'	  => 'literal',
+                'options' => [
+                    'route'    => '/user/manager',
+                    'defaults' => [
+                        'controller' => 'User\Controller\Manager',
+                        'action'     => 'list',
+                        'backend'    => true,
+                    ],
+                ],
+            ],
         ],
     ],
 
@@ -92,6 +116,13 @@ return [
         ],
         'invokables' => [
             'User\Mapper\User' => 'User\Mapper\User',
+        ],
+    ],
+
+    'view_helpers' => [
+        'invokables' => [
+            'userDashboard' => 'User\View\Helper\Dashboard',
+            'userSidebar'   => 'User\View\Helper\Sidebar',
         ],
     ],
 ];

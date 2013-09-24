@@ -43,6 +43,8 @@
                 <ul class="dropdown-menu" role="menu">
                     <li data-route="hello.dashboard.index"><a href="<?= $this->url('hello\dashboard\index'); ?>"><?= $this->_('Dashboard', 'Hello'); ?></a></li>
 
+                    <?php $this->sidebar(); ?>
+
                     <li class="divider"></li>
                     <li role="presentation" class="dropdown-header"><?= $this->_('Settings', 'Hello'); ?></a></li>
                     <li data-route="user.profile.edit"><a href="<?= $this->url('user\profile\edit'); ?>"><?= $this->_('Profile', 'User'); ?></a></li>

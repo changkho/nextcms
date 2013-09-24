@@ -11,6 +11,7 @@
 namespace Hello\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 class DashboardController extends AbstractActionController
 {
@@ -19,5 +20,16 @@ class DashboardController extends AbstractActionController
      */
     public function indexAction()
     {
+        /** @var \Zend\ServiceManager\ServiceManager $serviceLocator */
+        $serviceLocator = $this->getServiceLocator();
+
+        /** @var \Zend\ModuleManager\ModuleManager $moduleManager */
+        $moduleManager = $serviceLocator->get('moduleManager');
+        $modules       = $moduleManager->getModules();
+
+        return new ViewModel([
+            'eventManager' => $this->getEventManager(),
+            'modules'      => $modules,
+        ]);
     }
 }
