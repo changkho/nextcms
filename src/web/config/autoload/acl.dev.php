@@ -12,6 +12,8 @@ return [
     'acl' => [
         'resource_providers' => [
             'Acl\Provider\Resource\Config' => [
+                'Hello\Controller\Dashboard',
+                'User\Controller\Profile',
             ],
         ],
         'role_providers' => [
@@ -25,6 +27,11 @@ return [
             'Acl\Provider\Rule\Config' => [
                 'allow' => [
                     ['root', null, null],
+
+                    ['member', 'Hello\Controller\Dashboard', 'index'],
+
+                    ['member', 'User\Controller\Profile', 'edit'],
+                    ['member', 'User\Controller\Profile', 'password'],
                 ],
             ],
         ],
@@ -32,9 +39,9 @@ return [
             'Acl\Guard\Controller' => [],
         ],
         'backend_layout' => [
-            'default' => 'layout/member',
+            'default' => 'layout/admin',
         ],
         'forbidden_template' => 'error/403',
-        // 'signin_route'       => '',
+        'signin_route'       => 'user\auth\signin',
     ],
 ];

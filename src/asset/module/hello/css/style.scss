@@ -38,3 +38,11 @@ footer {
   height: $footerHeight - 1;
   padding-top: 10px;
 }
+
+// Panel
+.next-panel {
+  hr {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+}

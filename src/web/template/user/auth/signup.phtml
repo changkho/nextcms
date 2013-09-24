@@ -1,0 +1,96 @@
+<?php
+$this->headTitle($this->_('Sign up'));
+$this->headScript()->prependFile('/vendor/throttle/jquery.ba-throttle-debounce.min.js');
+?>
+
+<div class="row">
+    <div class="col-lg-4 col-lg-offset-4">
+        <div class="panel panel-default next-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->_('Sign up'); ?></h3>
+            </div>
+
+            <div class="panel-body">
+
+                <?php if ($user = $this->identity()) : ?>
+                <div><?= sprintf($this->_('You already signed in as %s. If you want to use other account, please <a href="%s">sign out</a>.'), '<span class="label label-info">' . $user->user_name . '</span>', $this->url('user\auth\signout')); ?></div>
+                <?php else : ?>
+
+                <?= $this->flashMessenger(); ?>
+
+                <p><?= sprintf($this->_('If you already have account, please <a href="%s">sign in</a>'), $this->url('user\auth\signin') . ($this->continue ? '?' . http_build_query(['continue' => $this->continue]) : '')); ?></p>
+
+                <form action="<?= $this->url('user\auth\signup') . ($this->queryString ? '?' . $this->queryString : ''); ?>" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="username" id="userName" placeholder="<?= $this->_('Username'); ?>" />
+                        <p id="userNameValidator" class="help-block alert alert-danger" style="display: none;"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="email" id="email" placeholder="<?= $this->_('Email'); ?>" />
+                        <p id="emailValidator" class="help-block alert alert-danger" style="display: none;"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" name="password" class="form-control" placeholder="<?= $this->_('Password'); ?>" />
+                    </div>
+
+                    <hr>
+
+                    <button type="submit" id="signupButton" class="btn btn-primary" disabled><?= $this->_('Sign up'); ?></button>
+                </form>
+                <?php endif; ?>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php $this->inlineScript()->captureStart(); ?>
+$(document).ready(function() {
+    $('#userName').on('keyup', $.throttle(1000, function() {
+        var userName = $(this).val();
+        if (userName == '' || userName.length < 6 || userName.length > 100 || userName.match(/^[a-zA-Z0-9_\.]+$/) == null) {
+            $('#signupButton').attr('disabled', 'disabled');
+            return;
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: '<?= $this->url('user\auth\check'); ?>',
+            data: {
+                user_name: userName
+            },
+            dataType: 'json'
+        }).done(function(result) {
+            if (result.available) {
+                $('#userNameValidator').fadeOut();
+                $('#signupButton').removeAttr('disabled');
+            } else {
+                $('#userNameValidator').html('<?= $this->_('The username is taken'); ?>').fadeIn();
+                $('#signupButton').attr('disabled', 'disabled');
+            }
+        });
+    }));
+
+    $('#email').on('keyup', $.throttle(1000, function() {
+        var email = $(this).val();
+        $.ajax({
+            type: 'POST',
+            url: '<?= $this->url('user\auth\check'); ?>',
+            data: {
+                email: email
+            },
+            dataType: 'json'
+        }).done(function(result) {
+            if (result.available) {
+                $('#emailValidator').fadeOut();
+                $('#signupButton').removeAttr('disabled');
+            } else {
+                $('#emailValidator').html('<?= $this->_('The email is taken'); ?>').fadeIn();
+                $('#signupButton').attr('disabled', 'disabled');
+            }
+        });
+    }));
+});
+<?php $this->inlineScript()->captureEnd(); ?>

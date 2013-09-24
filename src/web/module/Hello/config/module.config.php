@@ -11,7 +11,8 @@
 return [
     'controllers' => [
         'invokables' => [
-            'Hello\Controller\Index' => 'Hello\Controller\IndexController',
+            'Hello\Controller\Dashboard' => 'Hello\Controller\DashboardController',
+            'Hello\Controller\Index'     => 'Hello\Controller\IndexController',
         ],
     ],
 
@@ -24,6 +25,19 @@ return [
                     'defaults' => [
                         'controller' => 'Hello\Controller\Index',
                         'action'     => 'index',
+                    ],
+                ],
+            ],
+
+            // Dashboard
+            'hello\dashboard\index' => [
+                'type'	  => 'literal',
+                'options' => [
+                    'route'    => '/admin',
+                    'defaults' => [
+                        'controller' => 'Hello\Controller\Dashboard',
+                        'action'     => 'index',
+                        'backend'    => true,
                     ],
                 ],
             ],

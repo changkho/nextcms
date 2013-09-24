@@ -1,0 +1,124 @@
+<?php
+$this->headTitle($this->_('Edit profile'));
+?>
+
+<?php $this->placeHolder('nav')->captureStart(); ?>
+<ul>
+    <li><a href="<?= $this->url('user\profile\edit'); ?>" title="<?= $this->_('Profile', 'User'); ?>"><?= $this->_('Edit profile'); ?></a></li>
+</ul>
+<?php $this->placeHolder('nav')->captureEnd(); ?>
+
+<div class="container">
+    <?= $this->flashMessenger(); ?>
+
+    <form class="form-horizontal" method="POST" action="<?= $this->url('user\profile\edit'); ?>">
+        <div class="form-group">
+            <label class="col-lg-2 control-label"><?= $this->_('Username'); ?></label>
+            <div class="col-lg-4">
+                <input type="text" name="user_name" class="form-control" disabled value="<?= $this->escapeHtml($this->user->user_name); ?>" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label"><?= $this->_('Email'); ?></label>
+            <div class="col-lg-4">
+                <input type="text" name="email" class="form-control" disabled value="<?= $this->escapeHtml($this->user->email); ?>" />
+            </div>
+            <div class="col-lg-10 col-lg-offset-2"><small><?= $this->_('We do not share your email address with anyone'); ?></small></div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label"><?= $this->_('Full name'); ?></label>
+            <div class="col-lg-3">
+                <input type="text" name="first_name" class="form-control" value="<?= $this->escapeHtml($this->user->first_name); ?>" placeholder="<?= $this->_('First name'); ?>" />
+            </div>
+            <div class="col-lg-3">
+                <input type="text" name="last_name" class="form-control" value="<?= $this->escapeHtml($this->user->last_name); ?>" placeholder="<?= $this->_('Last name'); ?>" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label"><?= $this->_('Website'); ?></label>
+            <div class="col-lg-4">
+                <input type="text" name="website" class="form-control" value="<?= $this->escapeHtml($this->user->website); ?>" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label"><?= $this->_('Bio'); ?></label>
+            <div class="col-lg-6">
+                <textarea name="bio" rows="5" class="form-control"><?= $this->escapeHtml($this->user->bio); ?></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label"><?= $this->_('Gender'); ?></label>
+            <div class="col-lg-2">
+                <select name="gender" class="form-control">
+                    <option value="male" <?php if ('male' == $this->user->gender) : ?>selected="selected"<?php endif; ?>><?= $this->_('Male'); ?></option>
+                    <option value="female" <?php if ('female' == $this->user->gender) : ?>selected="selected"<?php endif; ?>><?= $this->_('Female'); ?></option>
+                    <option value="other" <?php if ('other' == $this->user->gender) : ?>selected="selected"<?php endif; ?>><?= $this->_('Other'); ?></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label"><?= $this->_('Birthday'); ?></label>
+            <div class="col-lg-2">
+                <select name="month" class="form-control">
+                    <option value="" disabled><?= $this->_('Month'); ?></option>
+                    <?php for ($i = 1; $i <= 12; $i++) : ?>
+                        <option value="<?= $i; ?>" <?php if ($this->month == $i) : ?>selected<?php endif; ?>><?= $i; ?></option>
+                    <?php endfor; ?>
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <select name="day" class="form-control">
+                    <option value="" disabled><?= $this->_('Day'); ?></option>
+                    <?php for ($i = 1; $i <= 31; $i++) : ?>
+                        <option value="<?= $i; ?>" <?php if ($this->day == $i) : ?>selected<?php endif; ?>><?= $i; ?></option>
+                    <?php endfor; ?>
+                </select>
+            </div>
+            <div class="col-lg-2">
+                <select name="year" class="form-control">
+                    <option value="" disabled><?= $this->_('Year'); ?></option>
+                    <?php for ($i = date('Y') - 100; $i <= date('Y'); $i++) : ?>
+                        <option value="<?= $i; ?>" <?php if ($this->year == $i) : ?>selected<?php endif; ?>><?= $i; ?></option>
+                    <?php endfor; ?>
+                </select>
+            </div>
+        </div>
+
+        <!-- address: -->
+        <fieldset>
+            <legend><?= $this->_('Address'); ?></legend>
+
+            <?= $this->address()->showForm($this->user->address); ?>
+        </fieldset>
+        <!-- :address -->
+
+        <hr>
+
+        <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+                <button type="submit" class="btn btn-primary"><?= $this->_('Save'); ?></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<?php $this->inlineScript()->captureStart(); ?>
+$(document).ready(function() {
+    $('select[name="month"],select[name="year"]').change(function() {
+        var numDays = new Date($('select[name="year"]').val(), $('select[name="month"]').val(), 0).getDate(), $daySelect = $('select[name="day"]'), currentDay = $daySelect.val();
+        $daySelect.find('option[value!=""]').remove();
+        for (var i = 1; i <= numDays; i++) {
+            $('<option/>').val(i).html(i).appendTo($daySelect);
+        }
+        if (currentDay <= numDays) {
+            $daySelect.val(currentDay);
+        }
+    });
+});
+<?php $this->inlineScript()->captureEnd(); ?>

@@ -1,0 +1,113 @@
+<?= $this->doctype(); ?>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php
+    $this->headLink()->prependStylesheet('/module/hello/css/admin.css')
+                     ->prependStylesheet('/vendor/font-awesome/css/font-awesome.min.css')
+                     ->prependStylesheet('/vendor/bootstrap/css/bootstrap.css');
+    $this->headScript()->prependFile('/vendor/bootstrap/js/bootstrap.min.js');
+    ?>
+    <!--[if IE 7]><link rel="stylesheet" href="<?= $this->cdn('/vendor/font-awesome/css/font-awesome-ie7.min.css'); ?>"><![endif]-->
+    <!--[if lt IE 9]><script src="<?= $this->cdn('vendor/jquery/jquery-1.10.2.min.js'); ?>"></script><![endif]-->
+    <!--[if gte IE 9]><!--><script src="<?= $this->cdn('vendor/jquery/jquery-2.0.3.min.js'); ?>"></script><!--<![endif]-->
+    <!--[if lt IE 9]>
+    <script src="<?= $this->cdn('/vendor/html5shiv/html5shiv.min.js'); ?>"></script>
+    <script src="<?= $this->cdn('/vendor/respond/respond.min.js'); ?>"></script>
+    <![endif]-->
+    <?= $this->headMeta(); ?>
+    <?= $this->headTitle(); ?>
+    <?= $this->headLink(); ?>
+</head>
+<body class="next-nav-enabled">
+    <div id="wrap">
+        <!-- nav: -->
+        <header class="navbar navbar-default navbar-fixed-top next-navbar" role="banner">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only"><?= $this->_('Toggle', 'Hello'); ?></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <nav>
+                <?= $this->placeHolder('nav'); ?>
+            </nav>
+        </header>
+        <!-- :nav -->
+
+        <!-- sidebar: -->
+        <aside class="next-sidebar">
+            <div class="dropdown">
+                <ul class="dropdown-menu" role="menu">
+                    <li data-route="hello.dashboard.index"><a href="<?= $this->url('hello\dashboard\index'); ?>"><?= $this->_('Dashboard', 'Hello'); ?></a></li>
+
+                    <li class="divider"></li>
+                    <li role="presentation" class="dropdown-header"><?= $this->_('Settings', 'Hello'); ?></a></li>
+                    <li data-route="user.profile.edit"><a href="<?= $this->url('user\profile\edit'); ?>"><?= $this->_('Profile', 'User'); ?></a></li>
+                    <li data-route="user.profile.password"><a href="<?= $this->url('user\profile\password'); ?>"><?= $this->_('Password', 'User'); ?></a></li>
+
+                    <li class="divider"></li>
+                    <li><a href="<?= $this->url('user\auth\signout'); ?>"><i class="icon-signout"></i> <?= $this->_('Sign out', 'User'); ?> <small>[<?= $this->identity()->user_name; ?>]</small></a></li>
+                    <li><a data-toggle="modal" href="#about" title="<?= $this->_('About', 'Hello'); ?>"><i class="icon-info-sign"></i> <?= $this->_('About', 'Hello'); ?></a></li>
+                </ul>
+            </div>
+        </aside>
+        <!-- :sidebar -->
+
+        <!-- content: -->
+        <div id="main">
+            <?= $this->content; ?>
+        </div>
+        <!-- :content -->
+
+        <div id="push"></div>
+    </div>
+
+    <!-- footer: -->
+    <footer role="contentinfo" id="footer">
+        <small><?= $this->_('&copy; NextCMS. All Rights Reserved.', 'Hello'); ?></small>
+    </footer>
+    <!-- :footer -->
+
+    <!-- about: -->
+    <div class="modal fade" id="about">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><?= $this->_('NextCMS', 'Hello'); ?></h4>
+                </div>
+                <div class="modal-body text-center">
+                    <p>
+                        v1.0<br />
+                        <?= sprintf($this->_('&copy; %s <a href="http://nextcms.org">NextCMS</a>. All rights reversed.'), date('Y')); ?>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- :about -->
+
+<?php $this->inlineScript()->captureStart(); ?>
+$(document).ready(function() {
+    // Active current nav item based on route
+    $('li[data-route="<?= implode('.', explode('\\', $this->routeName())); ?>"]').addClass('active');
+
+    $('.navbar-toggle').click(function() {
+        $('body').toggleClass('next-nav-enabled');
+        $('.next-sidebar').toggle();
+    });
+
+    // Move all modal to the end of page
+    // The modal will be shown under the background if the modal container has fixed position (#doc-main)
+    // See http://stackoverflow.com/questions/10636667/bootstrap-modal-appearing-under-background
+    $('.modal').appendTo('body');
+});
+<?php $this->inlineScript()->captureEnd(); ?>
+
+<?= $this->headScript(); ?>
+<?= $this->inlineScript(); ?>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<?php
+$this->headTitle($this->_('Sign in'));
+?>
+
+<div class="row">
+    <div class="col-lg-4 col-lg-offset-4">
+        <div class="panel panel-default next-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->_('Sign in'); ?></h3>
+            </div>
+
+            <div class="panel-body">
+                <?php if ($user = $this->identity()) : ?>
+                    <div><?= sprintf($this->_('You already signed in as %s. If you want to use other account, please <a href="%s">sign out</a>.'), '<span class="label label-info">' . $user->user_name . '</span>', $this->url('user\auth\signout')); ?></div>
+                <?php else : ?>
+
+                <?= $this->flashMessenger(); ?>
+
+                <p><?= sprintf($this->_('If you have not account, please <a href="%s">sign up</a>'), $this->url('user\auth\signup') . ($this->continue ? '?' . http_build_query(['continue' => $this->continue]) : '')); ?></p>
+
+                <form action="<?= $this->url('user\auth\signin') . ($this->queryString ? '?' . $this->queryString : ''); ?>" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="username" placeholder="<?= $this->_('Username'); ?>" />
+                    </div>
+
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="password" placeholder="<?= $this->_('Password'); ?>" />
+                    </div>
+
+                    <hr>
+
+                    <button type="submit" class="btn btn-large btn-primary"><?= $this->_('Sign in'); ?></button>
+                </form>
+
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
