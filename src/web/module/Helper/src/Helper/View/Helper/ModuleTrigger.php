@@ -8,20 +8,17 @@
  * @license     MIT
  */
 
-namespace Hello\View\Helper;
+namespace Helper\View\Helper;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\View\Helper\AbstractHelper;
 
-class Sidebar extends AbstractHelper implements ServiceLocatorAwareInterface
+class ModuleTrigger extends AbstractHelper implements ServiceLocatorAwareInterface
 {
     use ServiceLocatorAwareTrait;
 
-    /**
-     * Show the sidebar of current module
-     */
-    public function __invoke()
+    public function __invoke($eventPrefix, $module = null)
     {
         /** @var \Zend\View\HelperPluginManager $helperManager */
         $helperManager = $this->serviceLocator;
@@ -30,13 +27,13 @@ class Sidebar extends AbstractHelper implements ServiceLocatorAwareInterface
         $serviceLocator = $helperManager->getServiceLocator();
 
         /** @var \Zend\Mvc\Application $app */
-        $app   = $serviceLocator->get('application');
-        $route = $app->getMvcEvent()->getRouteMatch();
+        $app = $serviceLocator->get('application');
 
-        if ($route) {
-            $controller = $route->getParam('controller');
+        if (null == $module) {
+            $controller = $app->getMvcEvent()->getRouteMatch()->getParam('controller');
             $module     = explode('\\', $controller)[0];
-            $app->getEventManager()->trigger('sidebar.' . lcfirst($module), $this, ['module' => $module]);
         }
+
+        $app->getEventManager()->trigger($eventPrefix . '\\' . lcfirst($module), null, ['module' => $module]);
     }
 }

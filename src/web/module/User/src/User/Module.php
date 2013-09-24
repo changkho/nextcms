@@ -37,16 +37,16 @@ class Module implements  AutoloaderProviderInterface, BootstrapListenerInterface
     public function onBootstrap(EventInterface $e)
     {
         /** @var \Zend\Mvc\Application $app */
-        $app = $e->getTarget();
+        $app    = $e->getTarget();
+        $events = $app->getEventManager();
 
         /** @var \Zend\View\HelperPluginManager $viewHelperManager */
         $viewHelperManager = $app->getServiceManager()->get('viewhelpermanager');
 
-        $app->getEventManager()->getSharedManager()->attach('Hello\Controller\DashboardController', 'dashboard.user', function(Event $e) use ($viewHelperManager) {
+        $events->attach('dashboard\user', function(Event $e) use ($viewHelperManager) {
             $viewHelperManager->get('userDashboard')->__invoke();
         });
-
-        $app->getEventManager()->attach('sidebar.user', function(Event $e) use ($viewHelperManager) {
+        $events->attach('sidebar\user', function(Event $e) use ($viewHelperManager) {
             $viewHelperManager->get('userSidebar')->__invoke();
         });
     }

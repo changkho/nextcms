@@ -13,6 +13,7 @@ return [
         'invokables' => [
             'address'        => 'Helper\View\Helper\Address',
             'flashMessenger' => 'Helper\View\Helper\FlashMessenger',
+            'moduleTrigger'  => 'Helper\View\Helper\ModuleTrigger',
             'paginator'      => 'Helper\View\Helper\Paginator',
             'routeName'      => 'Helper\View\Helper\RouteName',
             'urlBuilder'     => 'Helper\View\Helper\UrlBuilder',
