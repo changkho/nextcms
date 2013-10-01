@@ -12,6 +12,7 @@ namespace User\Service;
 
 use MongoId;
 use MongoRegex;
+use Zend\Authentication\Result;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerAwareTrait;
@@ -87,18 +88,27 @@ class User implements EventManagerAwareInterface
      *
      * @param string $username
      * @param string $password
-     * @return \User\Entity\User|null
+     * @return \Zend\Authentication\Result
      */
     public function authenticate($username, $password)
     {
         $user = $this->userMapper->findOne(['user_name' => $username]);
-        if (null == $user || $this->verifyPassword($password, $user->password) == false) {
-            $this->getEventManager()->trigger('authenticate.error', $this, ['user' => $user]);
-            return null;
+        if (null == $user) {
+            return new Result(Result::FAILURE_IDENTITY_NOT_FOUND, null);
+        }
+
+        if ($this->verifyPassword($password, $user->password) == false) {
+            $this->getEventManager()->trigger('authenticate.invalidPassword', $this, ['user' => $user]);
+            return new Result(Result::FAILURE_CREDENTIAL_INVALID, null);
+        }
+
+        if ($user->status != 'activated') {
+            $this->getEventManager()->trigger('authenticate.deactivatedUser', $this, ['user' => $user]);
+            return new Result(Result::FAILURE_IDENTITY_AMBIGUOUS, null);
         }
 
         $this->getEventManager()->trigger('authenticate.success', $this, ['user' => $user]);
-        return $user;
+        return new Result(Result::SUCCESS, $user);
     }
 
     /**

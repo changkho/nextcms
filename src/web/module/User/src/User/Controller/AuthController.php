@@ -12,6 +12,7 @@ namespace User\Controller;
 
 use Acl\Service\Authentication;
 use User\Entity\User;
+use Zend\Authentication\Result;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
@@ -62,14 +63,28 @@ class AuthController extends AbstractActionController
 
             /** @var \User\Service\User $userService */
             $userService = $locator->get('User\Service\User');
-            $user        = $userService->authenticate($userName, $password);
+            $result      = $userService->authenticate($userName, $password);
 
-            if ($user == null) {
-                $this->flashMessenger()->addErrorMessage($this->_('Wrong username or password'));
+            if (!$result->isValid()) {
+                switch ($result->getCode()) {
+                    case Result::FAILURE_IDENTITY_NOT_FOUND:
+                        $this->flashMessenger()->addErrorMessage($this->_('Not found user with given name'));
+                        break;
+                    case Result::FAILURE_CREDENTIAL_INVALID:
+                        $this->flashMessenger()->addErrorMessage($this->_('Wrong username or password'));
+                        break;
+                    case Result::FAILURE_IDENTITY_AMBIGUOUS:
+                        $this->flashMessenger()->addErrorMessage($this->_('The user has not been activated'));
+                        break;
+                    default:
+                        $this->flashMessenger()->addErrorMessage($this->_('Cannot sign in'));
+                        break;
+                }
 
                 $queryString ? $this->redirect()->toUrl($this->url()->fromRoute('user\auth\signin') . ($queryString ? '?' . $queryString : ''))
                              : $this->redirect()->toRoute('user\auth\signin');
             } else {
+                $user = $result->getIdentity();
                 Authentication::getInstance()->getStorage()->write($user);
 
                 $this->getEventManager()->trigger('signin.success', $this, ['user' => $user]);
