@@ -164,6 +164,10 @@ class AuthController extends AbstractActionController
                 } else {
                     $this->redirect()->toUrl('/');
                 }
+            } else {
+                $this->flashMessenger()->addErrorMessage($this->_('The registration is not successful'));
+                $queryString ? $this->redirect()->toUrl($this->url()->fromRoute('user\auth\signup') . ($queryString ? '?' . $queryString : ''))
+                             : $this->redirect()->toRoute('user\auth\signup');
             }
         }
 
