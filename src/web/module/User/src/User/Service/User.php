@@ -211,7 +211,20 @@ class User implements EventManagerAwareInterface
      */
     public function exist($user)
     {
-        $criteria = $user->email ? ['email' => $user->email] : ['user_name' => $user->user_name];
-        return ($this->userMapper->findOne($criteria) != null);
+        if ($user->email == null && $user->user_name == null) {
+            return true;
+        }
+        $criteria = [];
+        if ($user->email) {
+            $criteria[] = ['email' => $user->email];
+        }
+        if ($user->user_name) {
+            $criteria[] = ['user_name' => $user->user_name];
+        }
+
+        $count = $this->userMapper->count([
+            '$or' => $criteria,
+        ]);
+        return ($count > 0);
     }
 }
